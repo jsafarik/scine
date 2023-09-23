@@ -4,7 +4,6 @@ description: 'Generate the content of scine'
 runs:
   using: 'composite'
   steps:
-    - uses: ./cicd/.github/actions/prepare-env
     - name: 'Generate site'
       run: |
         pushd master

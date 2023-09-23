@@ -4,7 +4,7 @@ name: preview-pr
 'on':
   pull_request:
     paths-ignore:
-      - ".github/**"
+      - '.github/**'
 
 permissions:
   pull-requests: write
@@ -21,6 +21,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: 'cicd'
+      - uses: ./cicd/.github/actions/prepare-env
       - uses: ./cicd/.github/actions/generate-site
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
