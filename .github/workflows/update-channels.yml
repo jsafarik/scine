@@ -20,13 +20,11 @@ jobs:
       CHANNELS_FILE: db/channels.json
       GH_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@v3
+      - name: Add CI/CD
+        uses: actions/checkout@v4
         with:
-          path: 'master'
-      - uses: actions/checkout@v3
-        with:
-          path: 'db'
-          ref: 'refs/heads/db'
+          path: 'cicd'
+      - uses: ./cicd/.github/actions/prepare-env
       - name: Generate channel entry
         run: |
           pushd master
@@ -47,7 +45,7 @@ jobs:
             echo "content updated, pushing new content"
             git config --global user.name 'Jan Safarik'
             git config --global user.email 'jsafarik@users.noreply.github.com'
-            git commit -am "[videos] Automatically update videos.json from GH workflow"
+            git commit -am "[channels] Automatically update channels.json from GH workflow"
             git push origin db:db-$CHANNEL
             GITHUB_WORKFLOW_URL=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
             gh pr create \
