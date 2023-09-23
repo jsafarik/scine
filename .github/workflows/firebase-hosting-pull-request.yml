@@ -1,0 +1,34 @@
+# https://github.com/firebase/firebase-tools
+
+name: preview-pr
+'on': pull_request
+
+permissions:
+  pull-requests: write
+  checks: write
+
+jobs:
+  build_and_preview:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.base_ref == 'master'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: 'master'
+      - uses: actions/checkout@v3
+        with:
+          path: 'db'
+          ref: 'refs/heads/db'
+      - name: "Generate site"
+        run: |
+          cp $GITHUB_WORKSPACE/db/videos.json $GITHUB_WORKSPACE/master/src/lib/videos.json
+          pushd master
+          npm ci && npm run build
+          popd
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          expires: 30d
+          projectId: scine-web
+          entrypoint: master
