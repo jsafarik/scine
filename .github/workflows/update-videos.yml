@@ -1,0 +1,41 @@
+name: update-videos
+'on':
+  schedule:
+    - cron: '0 0 * * *' # Run at 00:00
+
+permissions:
+  contents: write
+
+jobs:
+  update_videos:
+    runs-on: ubuntu-latest
+    env:
+      NEW_VIDEOS_FILE: db/videos-new.json
+    steps:
+      - name: Add CI/CD
+        uses: actions/checkout@v4
+        with:
+          path: 'cicd'
+      - uses: ./cicd/.github/actions/prepare-env
+      - name: Generate videos.json content
+        run: |
+          pushd master
+          npm ci
+          npm run --silent get-videos | jq > $GITHUB_WORKSPACE/$NEW_VIDEOS_FILE
+          echo 'Generated videos:'
+          cat $GITHUB_WORKSPACE/$NEW_VIDEOS_FILE
+          popd
+      - name: Commit db
+        run: |
+          pushd db
+          if ! cmp --silent videos.json videos-new.json; then
+            echo "Generated videos differ from current, pushing new content"
+            mv videos-new.json videos.json
+            git config --global user.name 'Jan Safarik'
+            git config --global user.email 'jsafarik@users.noreply.github.com'
+            git commit -am "[videos] Automatically update videos.json from GH workflow"
+            git push origin db
+          else
+            echo "No change in videos detected, skipping push"
+          fi
+          popd
