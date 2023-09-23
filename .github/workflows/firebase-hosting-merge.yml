@@ -1,15 +1,12 @@
 # https://github.com/firebase/firebase-tools
 
-name: preview-pr
-'on': pull_request
-
-permissions:
-  pull-requests: write
-  checks: write
-
+name: deploy-live
+'on':
+  push:
+    branches:
+      - master
 jobs:
-  build_and_preview:
-    if: github.event.pull_request.head.repo.full_name == github.repository && github.base_ref == 'master'
+  build_and_deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Add CI/CD
@@ -22,5 +19,5 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
           projectId: scine-web
-          channelId: ${{ inputs.channel }}
+          channelId: live
           entrypoint: master

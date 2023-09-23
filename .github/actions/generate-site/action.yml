@@ -1,0 +1,13 @@
+name: 'generate-site'
+description: 'Generate the content of scine'
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: ./cicd/.github/actions/prepare-env
+    - name: 'Generate site'
+      run: |
+        pushd master
+        npm ci && npm run build
+        popd
+      shell: bash
