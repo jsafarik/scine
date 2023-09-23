@@ -1,12 +1,18 @@
 name: 'prepare-env'
 description: 'Prepare scine CI/CD environment'
 
+inputs:
+  ui-branch:
+    description: 'Force workflow to use specific branch for UI. By default empty -> use event or default branch'
+    default: ''
+
 runs:
   using: 'composite'
   steps:
     - uses: actions/checkout@v3
       with:
         path: 'master'
+        ref: ${{ inputs.ui-branch }}
     - uses: actions/checkout@v3
       with:
         path: 'db'
