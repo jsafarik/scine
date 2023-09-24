@@ -10,14 +10,17 @@ name: deploy-live
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    env:
+      UI_REF: ${{ github.ref == 'refs/heads/db' && 'refs/heads/master' || '' }}
     steps:
       - name: Add CI/CD
         uses: actions/checkout@v4
         with:
           path: 'cicd'
+          ref: $UI_REF
       - uses: ./cicd/.github/actions/prepare-env
         with:
-          ui-branch: ${{ github.ref == 'refs/heads/db' && 'refs/heads/master' || '' }}
+          ui-branch: $UI_REF
       - uses: ./cicd/.github/actions/generate-site
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
