@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Video } from '$lib/types/video.type';
+	import CookieConsent from '$lib/components/CookieConsent.svelte';
 	import Section from '$lib/components/section/Section.svelte';
 	import Title from '$lib/components/Title.svelte';
 	import VideoEntry from '$lib/components/section/VideoEntry.svelte';
@@ -42,6 +43,7 @@
 		{/each}
 	{/if}
 </main>
+<CookieConsent />
 
 <style lang="scss">
 	main {
