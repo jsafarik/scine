@@ -1,8 +1,11 @@
 name: preview-pr
 'on':
   pull_request:
+    branches:
+      - 'master'
     paths-ignore:
       - '.github/**'
+      - 'README.md'
 
 permissions:
   pull-requests: write
@@ -10,9 +13,7 @@ permissions:
 
 jobs:
   build_and_preview:
-    if: |
-      github.event.pull_request.head.repo.full_name == github.repository &&
-      github.base_ref == 'master'
+    if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - name: Add CI/CD
