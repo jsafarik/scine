@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let title: string
+	export let title: string;
 </script>
 
 <header>
@@ -8,9 +8,9 @@
 
 <style lang="scss">
 	header {
-        user-select: none;
-        margin: 20px auto;
-        text-align: center;
+		user-select: none;
+		margin: 20px auto;
+		text-align: center;
 
 		h1 {
 			margin: 0;
