@@ -10,7 +10,7 @@
 <Button onClick={handleButtonClick} {open} />
 <nav style="--translate-x: -{open ? 350 : 0}px;">
 	<ul>
-		<li><a href="/">Home</a></li>
+		<li><a on:click={handleButtonClick} href="/">Home</a></li>
 	</ul>
 </nav>
 
