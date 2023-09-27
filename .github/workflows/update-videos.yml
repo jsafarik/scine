@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NEW_VIDEOS_FILE: db/videos-new.json
+      GITHUB_TOKEN: ${{ secrets.GH_PAT }}
     steps:
       - name: Add CI/CD
         uses: actions/checkout@v4
@@ -36,7 +37,12 @@ jobs:
             git config --global user.email 'jsafarik@users.noreply.github.com'
             git commit -am "[videos] Automatically update videos.json from GH workflow"
             git push origin db
+            echo "TRIGGER_DEPLOY=true" >> "$GITHUB_ENV"
           else
             echo "No change in videos detected, skipping push"
+            echo "TRIGGER_DEPLOY=false" >> "$GITHUB_ENV"
           fi
           popd
+      - name: Trigger deploy
+        if: env.TRIGGER_DEPLOY == 'true'
+        run: gh workflow run deploy-live -R jsafarik/scine
