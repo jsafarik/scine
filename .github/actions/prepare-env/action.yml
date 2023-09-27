@@ -17,6 +17,6 @@ runs:
       with:
         path: 'db'
         ref: 'refs/heads/db'
-    - name: 'Generate site'
+    - name: 'Prepare videos file in UI branch'
       run: cp $GITHUB_WORKSPACE/db/videos.json $GITHUB_WORKSPACE/master/src/lib/videos.json
       shell: bash
