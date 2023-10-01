@@ -1,9 +1,15 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+
 	export let title: string;
 </script>
 
 <header>
-	<h1>{title}</h1>
+	{#if $page.url.pathname == '/'}
+		<h1>{title}</h1>
+	{:else}
+		<h1><a href="/">{title}</a></h1>
+	{/if}
 </header>
 
 <style lang="scss">
@@ -14,6 +20,14 @@
 
 		h1 {
 			margin: 0;
+
+			a,
+			a:visited,
+			a:active,
+			a:hover {
+				color: #eee;
+				text-decoration: none;
+			}
 		}
 	}
 </style>

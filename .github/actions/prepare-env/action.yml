@@ -18,5 +18,7 @@ runs:
         path: 'db'
         ref: 'refs/heads/db'
     - name: 'Prepare videos file in UI branch'
-      run: cp $GITHUB_WORKSPACE/db/videos.json $GITHUB_WORKSPACE/master/src/lib/videos.json
+      run: |
+        cp $GITHUB_WORKSPACE/db/videos.json $GITHUB_WORKSPACE/master/src/lib/videos.json
+        cp $GITHUB_WORKSPACE/db/channels.json $GITHUB_WORKSPACE/master/src/lib/channels.json
       shell: bash
