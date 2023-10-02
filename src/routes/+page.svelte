@@ -1,11 +1,9 @@
 <script lang="ts">
 	import type { Video } from '$lib/types/video.type';
 	import Section from '$lib/components/section/Section.svelte';
-	import Title from '$lib/components/Title.svelte';
 	import VideoEntry from '$lib/components/section/VideoEntry.svelte';
 	import videos from '$lib/videos.json';
 	import Empty from '$lib/components/section/Empty.svelte';
-	import Navigation from '$lib/components/nav/Navigation.svelte';
 
 	const dayInMilliseconds = 24 * 60 * 60 * 1000;
 	const now = Date.now();
@@ -22,8 +20,6 @@
 	});
 </script>
 
-<Title title="scine" />
-<Navigation />
 <main>
 	{#if latest.length == 0 && earlierThisWeek.length == 0}
 		<Empty />

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Link from '../base/Link.svelte';
 	import Button from './Button.svelte';
 
 	let open = false;
@@ -10,7 +11,8 @@
 <Button onClick={handleButtonClick} {open} />
 <nav style="--translate-x: -{open ? 350 : 0}px;">
 	<ul>
-		<li><a on:click={handleButtonClick} href="/">Home</a></li>
+		<li role="none" on:click={handleButtonClick}><Link href="/">Home</Link></li>
+		<li role="none" on:click={handleButtonClick}><Link href="/channels">Channels</Link></li>
 	</ul>
 </nav>
 
@@ -40,20 +42,6 @@
 
 			li {
 				margin: 15px 0;
-
-				a,
-				a:visited,
-				a:active {
-					color: #999;
-					text-decoration: none;
-					transition: 0.1s ease-in-out;
-					user-select: none;
-					-webkit-tap-highlight-color: transparent;
-
-					&:hover {
-						color: #eee;
-					}
-				}
 			}
 		}
 	}

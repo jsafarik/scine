@@ -12,6 +12,6 @@ vite.config.ts.timestamp-*
 # JSON containing list of Video objects (used to generate content on the site)
 /src/lib/videos.json
 
-# JSON containing list of Channel objects (name, rss) - used for local development
+# JSON containing list of Channel objects
 # `npm run get-videos` can use this file when it's provided as a parameter (-- channels.json)
-channels.json
+/src/lib/channels.json
