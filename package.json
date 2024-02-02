@@ -14,7 +14,7 @@
 		"get-videos": "node ./scripts/getvideos.js"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/adapter-auto": "^2.1.1",
 		"@sveltejs/adapter-static": "^2.0.3",
 		"@sveltejs/kit": "^1.25.1",
 		"@types/xml2js": "^0.4.12",
