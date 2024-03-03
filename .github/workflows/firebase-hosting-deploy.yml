@@ -5,27 +5,33 @@ name: deploy-live
       - master
     paths-ignore:
       - '.github/**'
+      - 'README.md'
+  workflow_run:
+    workflows:
+      - update-videos
+    types:
+      - completed
   workflow_dispatch:
 
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     env:
-      UI_REF: ${{ github.ref == 'refs/heads/db' && 'refs/heads/master' || '' }}
+      API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+      AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+      PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+      STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+      MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+      APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+      MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
     steps:
-      - name: Add CI/CD
-        uses: actions/checkout@v4
-        with:
-          path: 'cicd'
-          ref: ${{ env.UI_REF }}
-      - uses: ./cicd/.github/actions/prepare-env
-        with:
-          ui-branch: ${{ env.UI_REF }}
-      - uses: ./cicd/.github/actions/generate-site
+      - uses: actions/checkout@v3
+      - name: 'Generate site'
+        run: npm ci && npm run build
+        shell: bash
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
           projectId: scine-web
           channelId: live
-          entrypoint: master

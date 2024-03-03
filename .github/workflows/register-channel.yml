@@ -1,16 +1,21 @@
-name: update-videos
+name: register-channel
 'on':
-  schedule:
-    - cron: '0 0 * * *' # Run at 00:00
   workflow_dispatch:
+    inputs:
+      channelHandle:
+        description: 'Handle of youtube channel - without "@"'
+        type: string
+        required: true
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
-  update_videos:
+  update_channels:
     runs-on: ubuntu-latest
     env:
+      CHANNEL: ${{ inputs.channelHandle }}
       API_KEY: ${{ secrets.FIREBASE_API_KEY }}
       AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
       PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
@@ -20,5 +25,5 @@ jobs:
       MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
     steps:
       - uses: actions/checkout@v3
-      - name: Update videos in database
-        run: npm ci && npm run update-videos
+      - name: Generate channel entry
+        run: npm ci && npm run register-channel -- $CHANNEL -y
