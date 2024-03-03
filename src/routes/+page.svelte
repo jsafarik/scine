@@ -31,7 +31,7 @@
 						<VideoEntry
 							thumbnailUrl={video.thumbnailUrl}
 							title={video.title}
-							videoId={video.videoId}
+							videoId={video.id}
 							channelName={video.channelName}
 						/>
 					{/each}
