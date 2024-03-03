@@ -2,17 +2,18 @@
 	import type { Video } from '$lib/types/video.type';
 	import Section from '$lib/components/section/Section.svelte';
 	import VideoEntry from '$lib/components/section/VideoEntry.svelte';
-	import videos from '$lib/videos.json';
 	import Empty from '$lib/components/section/Empty.svelte';
+
+	export let data;
 
 	const dayInMilliseconds = 24 * 60 * 60 * 1000;
 	const now = Date.now();
 
-	const latest: Array<Video> = videos.filter((video: Video) => {
+	const latest: Array<Video> = data.videos.filter((video: Video) => {
 		return Date.parse(video.published) > now - dayInMilliseconds;
 	});
 
-	const earlierThisWeek: Array<Video> = videos.filter((video: Video) => {
+	const earlierThisWeek: Array<Video> = data.videos.filter((video: Video) => {
 		return (
 			now - dayInMilliseconds > Date.parse(video.published) &&
 			Date.parse(video.published) > now - dayInMilliseconds * 7
@@ -31,7 +32,7 @@
 						<VideoEntry
 							thumbnailUrl={video.thumbnailUrl}
 							title={video.title}
-							videoId={video.videoId}
+							videoId={video.id}
 							channelName={video.channelName}
 						/>
 					{/each}
