@@ -18,6 +18,8 @@ jobs:
       MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
       APP_ID: ${{ secrets.FIREBASE_APP_ID }}
       MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
+      FIRESTORE_USERNAME: ${{ secrets.FIRESTORE_USERNAME }}
+      FIRESTORE_PASSWORD: ${{ secrets.FIRESTORE_PASSWORD }}
     steps:
       - uses: actions/checkout@v3
       - name: Update videos in database

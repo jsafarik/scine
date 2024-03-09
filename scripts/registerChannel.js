@@ -43,7 +43,7 @@ async function shouldRegister() {
 }
 
 if (!prompt || (await shouldRegister())) {
-	open();
+	await open();
 	await addChannel({ name: channelName, handle: channelHandle, rss: rssUrl, id: channelId });
 	close();
 } else {

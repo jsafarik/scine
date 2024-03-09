@@ -4,7 +4,7 @@ import {
 	closeConnection
 } from '../src/lib/firebase/firebase.js';
 
-export function open() {
+export async function open() {
 	initFirebaseConfig(
 		process.env.API_KEY,
 		process.env.AUTH_DOMAIN,
@@ -12,10 +12,12 @@ export function open() {
 		process.env.STORAGE_BUCKET,
 		process.env.MESSAGING_SENDER_ID,
 		process.env.APP_ID,
-		process.env.MEASUREMENT_ID
+		process.env.MEASUREMENT_ID,
+		process.env.FIRESTORE_USERNAME,
+		process.env.FIRESTORE_PASSWORD
 	);
 
-	openConnection();
+	await openConnection();
 }
 
 export function close() {

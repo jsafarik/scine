@@ -6,7 +6,7 @@ import { Timestamp } from 'firebase/firestore';
 
 const daysToUpdate = 3;
 
-open();
+await open();
 let channels = await getChannels();
 
 for (const channel of channels) {
