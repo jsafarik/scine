@@ -2,7 +2,7 @@ let firebaseConfig;
 let firebaseApp;
 let firebaseDb;
 
-function openConnection(): void;
+async function openConnection(): Promise<void>;
 function initFirebaseConfig(
 	apiKey: string,
 	authDomain: string,
@@ -10,7 +10,9 @@ function initFirebaseConfig(
 	storageBucket: string,
 	messagingSenderId: string,
 	appId: string,
-	measurementId: string
+	measurementId: string,
+	firestoreUsername: string,
+	firestorePassword: string
 ): void;
 async function getVideos(): Promise<Array<Video>>;
 async function getChannels(): Promise<

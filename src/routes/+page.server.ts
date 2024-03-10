@@ -15,9 +15,11 @@ export async function load(): Promise<{ videos: Array<Video> }> {
 		env.STORAGE_BUCKET,
 		env.MESSAGING_SENDER_ID,
 		env.APP_ID,
-		env.MEASUREMENT_ID
+		env.MEASUREMENT_ID,
+		env.FIRESTORE_USERNAME,
+		env.FIRESTORE_PASSWORD
 	);
-	openConnection();
+	await openConnection();
 	const videos = await getVideos();
 	closeConnection();
 	return { videos };

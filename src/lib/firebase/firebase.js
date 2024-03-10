@@ -1,12 +1,14 @@
 import { initializeApp, getApps, deleteApp } from 'firebase/app';
 import { getFirestore, getDocs, collection, setDoc, doc } from 'firebase/firestore';
-
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 let firebaseConfig
+let firestoreConfig
 let firebaseApp
 let firebaseDb
+let firebaseAuth
 
-function openConnection() {
+async function openConnection() {
 	if (!getApps().length) {
 		firebaseApp = initializeApp(firebaseConfig);
 	} else {
@@ -14,9 +16,11 @@ function openConnection() {
 	}
 
 	firebaseDb = getFirestore(firebaseApp);
+	firebaseAuth = getAuth(firebaseApp);
+	await signInWithEmailAndPassword(firebaseAuth, firestoreConfig.username, firestoreConfig.password);
 }
 
-function initFirebaseConfig(apiKey, authDomain, projectId, storageBucket, messagingSenderId, appId, measurementId) {
+function initFirebaseConfig(apiKey, authDomain, projectId, storageBucket, messagingSenderId, appId, measurementId, firestoreUsername, firestorePassword) {
 	firebaseConfig = {
 		apiKey: apiKey,
 		authDomain: authDomain,
@@ -26,6 +30,11 @@ function initFirebaseConfig(apiKey, authDomain, projectId, storageBucket, messag
 		appId: appId,
 		measurementId: measurementId
 	};
+
+	firestoreConfig = {
+		username: firestoreUsername,
+		password: firestorePassword
+	}
 }
 
 async function getVideos() {
