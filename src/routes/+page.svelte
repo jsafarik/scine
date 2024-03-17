@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Video } from '$lib/types/video.type';
+	import type { Video } from '$lib/firebase/video';
 	import Section from '$lib/components/section/Section.svelte';
 	import VideoEntry from '$lib/components/section/VideoEntry.svelte';
 	import Empty from '$lib/components/section/Empty.svelte';
@@ -10,13 +10,12 @@
 	const now = Date.now();
 
 	const latest: Array<Video> = data.videos.filter((video: Video) => {
-		return Date.parse(video.published) > now - dayInMilliseconds;
+		return video.published > now - dayInMilliseconds;
 	});
 
 	const earlierThisWeek: Array<Video> = data.videos.filter((video: Video) => {
 		return (
-			now - dayInMilliseconds > Date.parse(video.published) &&
-			Date.parse(video.published) > now - dayInMilliseconds * 7
+			now - dayInMilliseconds > video.published && video.published > now - dayInMilliseconds * 7
 		);
 	});
 </script>

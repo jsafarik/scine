@@ -4,7 +4,7 @@ import {
 	closeConnection,
 	getVideos
 } from '$lib/firebase/firebase';
-import type { Video } from '$lib/types/video.type';
+import type { Video } from '$lib/firebase/video';
 import { env } from '$env/dynamic/private';
 
 export async function load(): Promise<{ videos: Array<Video> }> {
@@ -20,7 +20,7 @@ export async function load(): Promise<{ videos: Array<Video> }> {
 		env.FIRESTORE_PASSWORD
 	);
 	await openConnection();
-	const videos = await getVideos();
+	const videos = (await getVideos()).map(video => video.toSimpleObject());
 	closeConnection();
 	return { videos };
 }
