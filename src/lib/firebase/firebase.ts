@@ -81,7 +81,7 @@ async function getChannels(): Promise<Array<Channel>> {
 }
 
 async function addVideo(video: Video): Promise<void> {
-	await setDoc(doc(firebaseDb, 'videos', video.id), video);
+	await setDoc(doc(firebaseDb, 'videos', video.id), video.toFirestoreVideo());
 }
 
 async function addChannel(channel: Channel): Promise<void> {
