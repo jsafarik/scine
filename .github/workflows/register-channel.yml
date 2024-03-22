@@ -26,6 +26,6 @@ jobs:
       FIRESTORE_USERNAME: ${{ secrets.FIRESTORE_USERNAME }}
       FIRESTORE_PASSWORD: ${{ secrets.FIRESTORE_PASSWORD }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Generate channel entry
         run: npm ci && npm run register-channel -- $CHANNEL -y
