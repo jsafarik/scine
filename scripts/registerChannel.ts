@@ -1,7 +1,7 @@
 import { parseStringPromise } from 'xml2js';
 import { stripPrefix } from 'xml2js/lib/processors.js';
-import { open, close } from './firebase.js';
-import { addChannel } from '../src/lib/firebase/firebase.js';
+import { open, close } from './firebase';
+import { addChannel } from '../src/lib/firebase/firebase';
 import { createInterface } from 'node:readline/promises';
 
 if (process.argv.length < 3) {
@@ -18,12 +18,16 @@ const matcher = /https:\/\/www\.youtube\.com\/feeds\/videos.xml\?channel_id=([a-
 	channelHtml
 );
 
+if (!matcher) {
+	process.exit(1);
+}
+
 const rssUrl = matcher[0];
 const channelId = matcher[1];
 
 let rssContent = await (await fetch(rssUrl)).text();
 let rss = await parseStringPromise(rssContent, { tagNameProcessors: [stripPrefix] });
-let channelName = rss.feed.title[0]
+let channelName = rss.feed.title[0];
 
 console.table({
 	'Channel Name': channelName,
