@@ -32,6 +32,18 @@ export class Video {
 	toSimpleObject() {
 		return Object.assign({}, this);
 	}
+
+	matchesFirestoreVideo(video: FirestoreVideo): boolean {
+		let fv = this.toFirestoreVideo();
+
+		return (
+			fv.published.isEqual(video.published) &&
+			fv.title == video.title &&
+			fv.id == video.id &&
+			fv.thumbnailUrl == video.thumbnailUrl &&
+			fv.channelName == video.channelName
+		);
+	}
 }
 
 export type FirestoreVideo = {

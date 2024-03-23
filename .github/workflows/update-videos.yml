@@ -20,7 +20,11 @@ jobs:
       MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
       FIRESTORE_USERNAME: ${{ secrets.FIRESTORE_USERNAME }}
       FIRESTORE_PASSWORD: ${{ secrets.FIRESTORE_PASSWORD }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - name: Update videos in database
         run: npm ci && npm run update-videos
+      - name: Trigger deploy
+        if: ${{ hashFiles('.deploy') != '' }}
+        run: gh workflow run deploy-live

@@ -6,11 +6,6 @@ name: deploy-live
     paths-ignore:
       - '.github/**'
       - 'README.md'
-  workflow_run:
-    workflows:
-      - update-videos
-    types:
-      - completed
   workflow_dispatch:
 
 jobs:
