@@ -3,6 +3,16 @@ name: update-videos
   schedule:
     - cron: '0 0 * * *' # Run at 00:00
   workflow_dispatch:
+    inputs:
+      daysToUpdate:
+        description: 'Max video age (in days) to be updated'
+        type: string
+        default: "3"
+        required: true
+      channelId:
+        description: 'ID of the channel'
+        type: string
+        required: false
 
 permissions:
   contents: write
@@ -24,7 +34,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Update videos in database
-        run: npm ci && npm run update-videos
+        run: npm ci && npm run update-videos -- ${{ inputs.daysToUpdate }} ${{ inputs.channelId }}
       - name: Trigger deploy
         if: ${{ hashFiles('.deploy') != '' }}
         run: gh workflow run deploy-live
