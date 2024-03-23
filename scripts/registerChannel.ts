@@ -3,6 +3,7 @@ import { stripPrefix } from 'xml2js/lib/processors.js';
 import { open, close } from './firebase';
 import { addChannel } from '../src/lib/firebase/firebase';
 import { createInterface } from 'node:readline/promises';
+import { writeFileSync } from 'node:fs';
 
 if (process.argv.length < 3) {
 	console.log('You need to provide a handle of a youtube channel (withouth the "@"!).');
@@ -50,6 +51,7 @@ if (!prompt || (await shouldRegister())) {
 	await open();
 	await addChannel({ name: channelName, handle: channelHandle, rss: rssUrl, id: channelId });
 	close();
+	writeFileSync('.channel', channelId);
 } else {
 	console.log('Skipping channel registration');
 }

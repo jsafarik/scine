@@ -1,14 +1,14 @@
 import { parseStringPromise } from 'xml2js';
 import { stripPrefix } from 'xml2js/lib/processors.js';
-import { addVideo, getChannels } from '../src/lib/firebase/firebase';
+import { addVideo, getChannel, getChannels } from '../src/lib/firebase/firebase';
 import { open, close } from './firebase';
 import { Video } from '../src/lib/firebase/video';
 import { writeFileSync } from 'node:fs';
 
-const daysToUpdate = 3;
+const daysToUpdate = parseInt(process.argv[2]);
 
 await open();
-let channels = await getChannels();
+let channels = process.argv[3] ? [await getChannel(process.argv[3])] : await getChannels();
 
 let shouldDeploy = false;
 

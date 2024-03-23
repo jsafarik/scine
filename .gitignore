@@ -17,3 +17,4 @@ vite.config.ts.timestamp-*
 /src/lib/channels.json
 
 .deploy
+.channel

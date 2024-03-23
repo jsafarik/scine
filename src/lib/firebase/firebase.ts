@@ -80,6 +80,10 @@ async function getChannels(): Promise<Array<Channel>> {
 	);
 }
 
+async function getChannel(id: string): Promise<Channel> {
+	return (await getDoc(doc(firebaseDb, 'channels', id))).data() as Channel;
+}
+
 /**
  * Add or update a video in database.
  * In case the video already exists and the content is identical, skip the update.
@@ -108,6 +112,7 @@ export {
 	openConnection,
 	closeConnection,
 	getVideos,
+	getChannel,
 	getChannels,
 	addVideo,
 	addChannel
