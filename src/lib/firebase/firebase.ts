@@ -12,7 +12,7 @@ import {
 	setDoc,
 	doc,
 	Firestore,
-	Timestamp
+	getDoc
 } from 'firebase/firestore';
 import { getAuth, signInWithEmailAndPassword, type Auth } from 'firebase/auth';
 import { type FirestoreVideo, Video } from './video';
@@ -80,8 +80,19 @@ async function getChannels(): Promise<Array<Channel>> {
 	);
 }
 
-async function addVideo(video: Video): Promise<void> {
+/**
+ * Add or update a video in database.
+ * In case the video already exists and the content is identical, skip the update.
+ * @param video video to be added
+ * @returns true if content was updated, false otherwise
+ */
+async function addVideo(video: Video): Promise<boolean> {
+	let current = await getDoc(doc(firebaseDb, 'videos', video.id));
+	if (current.exists() && video.matchesFirestoreVideo(current.data() as FirestoreVideo)) {
+		return false;
+	}
 	await setDoc(doc(firebaseDb, 'videos', video.id), video.toFirestoreVideo());
+	return true;
 }
 
 async function addChannel(channel: Channel): Promise<void> {

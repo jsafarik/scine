@@ -15,3 +15,5 @@ vite.config.ts.timestamp-*
 # JSON containing list of Channel objects
 # `npm run get-videos` can use this file when it's provided as a parameter (-- channels.json)
 /src/lib/channels.json
+
+.deploy

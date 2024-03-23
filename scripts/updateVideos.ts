@@ -3,11 +3,14 @@ import { stripPrefix } from 'xml2js/lib/processors.js';
 import { addVideo, getChannels } from '../src/lib/firebase/firebase';
 import { open, close } from './firebase';
 import { Video } from '../src/lib/firebase/video';
+import { writeFileSync } from 'node:fs';
 
 const daysToUpdate = 3;
 
 await open();
 let channels = await getChannels();
+
+let shouldDeploy = false;
 
 for (const channel of channels) {
 	let rssContent = await (await fetch(channel.rss)).text();
@@ -26,8 +29,13 @@ for (const channel of channels) {
 			rss.feed.title[0]
 		);
 		console.table(video);
-		await addVideo(video);
+		shouldDeploy ||= await addVideo(video);
 	}
+}
+
+if (shouldDeploy) {
+	writeFileSync('.deploy', '');
+	console.log("Updated videos, deploy should be triggered")
 }
 
 close();
