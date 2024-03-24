@@ -34,7 +34,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Update videos in database
-        run: npm ci && npm run update-videos -- ${{ inputs.daysToUpdate }} ${{ inputs.channelId }}
+        run: npm ci && npm run update-videos -- ${{ inputs.daysToUpdate || '3' }} ${{ inputs.channelId }}
       - name: Trigger deploy
         if: ${{ hashFiles('.deploy') != '' }}
         run: gh workflow run deploy-live
