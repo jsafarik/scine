@@ -3,15 +3,10 @@
 	export let title: string;
 	export let channelName: string;
 	export let videoId: string;
-
-	let width: number;
-	$: height = (width / 16) * 9;
 </script>
 
 <a
 	href="https://www.youtube.com/watch?v={videoId}"
-	bind:offsetWidth={width}
-	style="--height: {height}px;"
 	target="_blank"
 >
 	<img src={thumbnailUrl} alt="{title} thumbnail" />
@@ -21,7 +16,7 @@
 <style lang="scss">
 	a {
 		width: 100%;
-		height: var(--height);
+		aspect-ratio: 16 / 9;
 		overflow: hidden;
 		border-radius: 10px;
 		display: flex;
