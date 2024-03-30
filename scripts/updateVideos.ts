@@ -21,10 +21,23 @@ for (const channel of channels) {
 	});
 
 	for (const entry of videos) {
+		let videoId = entry.id[0].replace('yt:video:', '');
+
+		// hacky way to test whether a video is actually a short or not
+		let shortResponse = await fetch(`https://www.youtube.com/shorts/${videoId}`, {
+			redirect: 'manual',
+			headers: { 'User-Agent': '' }
+		});
+
+		// a regular video returns 303 (redirects to /watch?v=$videoId)
+		// shorts return 200
+		if (shortResponse.status == 200) {
+			continue;
+		}
 		const video = new Video(
 			Date.parse(entry.published[0]),
 			entry.title[0],
-			entry.id[0].replace('yt:video:', ''),
+			videoId,
 			entry.group[0].thumbnail[0].$.url,
 			rss.feed.title[0]
 		);
@@ -35,7 +48,7 @@ for (const channel of channels) {
 
 if (shouldDeploy) {
 	writeFileSync('.deploy', '');
-	console.log("Updated videos, deploy should be triggered")
+	console.log('Updated videos, deploy should be triggered');
 }
 
 close();
