@@ -15,7 +15,9 @@ import {
 	getDoc,
 	query,
 	where,
-	Timestamp
+	Timestamp,
+	orderBy,
+	limit
 } from 'firebase/firestore';
 import { getAuth, signInWithEmailAndPassword, type Auth } from 'firebase/auth';
 import { type FirestoreVideo, Video } from './video';
@@ -70,22 +72,41 @@ function initFirebaseConfig(
 	};
 }
 
-async function getVideos(): Promise<Array<Video>> {
-	return (await getDocs(collection(firebaseDb, 'videos'))).docs.map((doc) => {
+function getVideoQuery(ageThreshold?: number | undefined, count?: number | undefined) {
+	let videosRef = collection(firebaseDb, 'videos');
+
+	let q = query(videosRef, orderBy('published', 'desc'));
+
+	if (ageThreshold != undefined) {
+		q = query(q, where('published', '>=', Timestamp.fromMillis(ageThreshold)));
+	}
+
+	if (count != undefined) {
+		q = query(q, limit(count));
+	}
+
+	return q;
+}
+
+async function getVideos(ageThreshold?: number | undefined): Promise<Array<Video>> {
+	let query = getVideoQuery(ageThreshold);
+
+	return (await getDocs(query)).docs.map((doc) => {
 		let video = doc.data() as FirestoreVideo;
 		return Video.fromFirestoreVideo(video);
 	});
 }
 
-async function getVideosPublishedAfter(publishTime: number): Promise<Array<Video>> {
-	let videosRef = collection(firebaseDb, 'videos');
+async function countVideos(ageThreshold?: number | undefined): Promise<number> {
+	let query = getVideoQuery(ageThreshold);
 
-	let q = query(
-		videosRef,
-		where('published', '>=', Timestamp.fromMillis(publishTime))
-	);
+	return (await getDocs(query)).size;
+}
 
-	return (await getDocs(q)).docs.map((doc) => {
+async function getLatestVideos(count: number): Promise<Array<Video>> {
+	let query = getVideoQuery(undefined, count);
+
+	return (await getDocs(query)).docs.map((doc) => {
 		let video = doc.data() as FirestoreVideo;
 		return Video.fromFirestoreVideo(video);
 	});
@@ -129,7 +150,8 @@ export {
 	openConnection,
 	closeConnection,
 	getVideos,
-	getVideosPublishedAfter,
+	countVideos,
+	getLatestVideos,
 	getChannel,
 	getChannels,
 	addVideo,
