@@ -12,7 +12,10 @@ import {
 	setDoc,
 	doc,
 	Firestore,
-	getDoc
+	getDoc,
+	query,
+	where,
+	Timestamp
 } from 'firebase/firestore';
 import { getAuth, signInWithEmailAndPassword, type Auth } from 'firebase/auth';
 import { type FirestoreVideo, Video } from './video';
@@ -74,6 +77,20 @@ async function getVideos(): Promise<Array<Video>> {
 	});
 }
 
+async function getVideosPublishedAfter(publishTime: number): Promise<Array<Video>> {
+	let videosRef = collection(firebaseDb, 'videos');
+
+	let q = query(
+		videosRef,
+		where('published', '>=', Timestamp.fromMillis(publishTime))
+	);
+
+	return (await getDocs(q)).docs.map((doc) => {
+		let video = doc.data() as FirestoreVideo;
+		return Video.fromFirestoreVideo(video);
+	});
+}
+
 async function getChannels(): Promise<Array<Channel>> {
 	return (await getDocs(collection(firebaseDb, 'channels'))).docs.map(
 		(doc) => doc.data() as Channel
@@ -112,6 +129,7 @@ export {
 	openConnection,
 	closeConnection,
 	getVideos,
+	getVideosPublishedAfter,
 	getChannel,
 	getChannels,
 	addVideo,

@@ -2,7 +2,7 @@ import {
 	initFirebaseConfig,
 	openConnection,
 	closeConnection,
-	getVideos
+	getVideosPublishedAfter
 } from '$lib/firebase/firebase';
 import type { Video } from '$lib/firebase/video';
 import { env } from '$env/dynamic/private';
@@ -20,7 +20,7 @@ export async function load(): Promise<{ videos: Array<Video> }> {
 		env.FIRESTORE_PASSWORD!
 	);
 	await openConnection();
-	const videos = (await getVideos())
+	const videos = (await getVideosPublishedAfter(Date.now() - 7 * 24 * 60 * 60 * 1000))
 		.sort((a, b) => {
 			return b.published - a.published;
 		})

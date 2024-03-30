@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { Video } from '$lib/firebase/video';
 	import Section from '$lib/components/section/Section.svelte';
 	import VideoEntry from '$lib/components/section/VideoEntry.svelte';
 	import Empty from '$lib/components/section/Empty.svelte';
@@ -9,22 +8,15 @@
 	const dayInMilliseconds = 24 * 60 * 60 * 1000;
 	const now = Date.now();
 
-	const latest: Array<Video> = data.videos.filter((video: Video) => {
-		return video.published > now - dayInMilliseconds;
-	});
-
-	const earlierThisWeek: Array<Video> = data.videos.filter((video: Video) => {
-		return (
-			now - dayInMilliseconds > video.published && video.published > now - dayInMilliseconds * 7
-		);
-	});
+	const earlier = data.videos.map(video => video)
+	const latest = earlier.splice(0, earlier.findLastIndex(video => video.published > now - dayInMilliseconds))
 </script>
 
 <main>
-	{#if latest.length == 0 && earlierThisWeek.length == 0}
+	{#if latest.length == 0 && earlier.length == 0}
 		<Empty />
 	{:else}
-		{#each new Map( [['Past 24 hours', latest], ['Past 7 days', earlierThisWeek]] ).entries() as [title, values]}
+		{#each new Map( [['Past 24 hours', latest], ['Recently', earlier]] ).entries() as [title, values]}
 			{#if values.length != 0}
 				<Section name={title}>
 					{#each values as video}
