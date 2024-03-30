@@ -9,18 +9,22 @@ import { env } from '$env/dynamic/private';
 
 export async function load(): Promise<{ videos: Array<Video> }> {
 	initFirebaseConfig(
-		env.API_KEY,
-		env.AUTH_DOMAIN,
-		env.PROJECT_ID,
-		env.STORAGE_BUCKET,
-		env.MESSAGING_SENDER_ID,
-		env.APP_ID,
-		env.MEASUREMENT_ID,
-		env.FIRESTORE_USERNAME,
-		env.FIRESTORE_PASSWORD
+		env.API_KEY!,
+		env.AUTH_DOMAIN!,
+		env.PROJECT_ID!,
+		env.STORAGE_BUCKET!,
+		env.MESSAGING_SENDER_ID!,
+		env.APP_ID!,
+		env.MEASUREMENT_ID!,
+		env.FIRESTORE_USERNAME!,
+		env.FIRESTORE_PASSWORD!
 	);
 	await openConnection();
-	const videos = (await getVideos()).map(video => video.toSimpleObject());
+	const videos = (await getVideos())
+		.sort((a, b) => {
+			return b.published - a.published;
+		})
+		.map((video) => video.toSimpleObject());
 	closeConnection();
 	return { videos };
 }
