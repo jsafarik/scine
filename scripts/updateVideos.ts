@@ -55,7 +55,7 @@ for (const channel of channels) {
 			rss.feed.title[0]
 		);
 		console.table(video);
-		shouldDeploy ||= await addVideo(video);
+		shouldDeploy = await addVideo(video) || shouldDeploy;
 	}
 }
 
